@@ -25,6 +25,7 @@ class DiceLoss(_Loss):
         self,
         mode: str,
         classes: List[int] = None,
+        weights: List[float] = None,
         log_loss=False,
         from_logits=True,
         smooth: float = 0.0,
@@ -50,6 +51,7 @@ class DiceLoss(_Loss):
             classes = to_tensor(classes, dtype=torch.long)
 
         self.classes = classes
+        self.weights = weights
         self.from_logits = from_logits
         self.smooth = smooth
         self.eps = eps
@@ -128,5 +130,8 @@ class DiceLoss(_Loss):
 
         if self.classes is not None:
             loss = loss[self.classes]
+
+        if self.weights is not None:
+            loss = loss * self.weights
 
         return loss.mean()
