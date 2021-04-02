@@ -60,8 +60,10 @@ I made the following observations.
 
 ## Remaining Question
 
-I was not able to find papers that addressed the handling of padding.
+Models often require the image dimension to be divisible by a power of 2, e.g., 32. Papers, in general, did not discuss how they handled padding.
 
 * Should it be its own class? 
 * Should it count as background? 
 * Should it be ignored from the loss function?
+
+Messou in his master's thesis, [Handling Invalid Pixels in Convolutional Neural Networks](https://vtechworks.lib.vt.edu/handle/10919/98619), investigates two methods, partial and edge convolutional, to handle border and internal padding. I did not want to change the model architecture, so I did not implement either method.
