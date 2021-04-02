@@ -51,13 +51,21 @@ class DiceLoss(_Loss):
             classes = to_tensor(classes, dtype=torch.long)
 
         self.classes = classes
-        self.weights = weights
         self.from_logits = from_logits
         self.smooth = smooth
         self.eps = eps
         self.ignore_index = ignore_index
         self.log_loss = log_loss
+        self._weights = weights
 
+    @property
+    def weights(self):
+        return self._weights
+        
+    @weights.setter
+    def weights(self, weights):
+        self._weights = weights
+        
     def forward(self, y_pred: Tensor, y_true: Tensor) -> Tensor:
         """
 
@@ -131,7 +139,7 @@ class DiceLoss(_Loss):
         if self.classes is not None:
             loss = loss[self.classes]
 
-        if self.weights is not None:
-            loss = loss * self.weights
+        if self._weights is not None:
+            loss = loss * self._weights
 
         return loss.mean()
